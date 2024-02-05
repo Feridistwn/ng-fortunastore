@@ -1,0 +1,151 @@
+<app-header title="{{ title }}" desc="{{ desc }}"></app-header>
+<div class="container px-5">
+    <div class="py-5 text-center">
+        <p class="lead px-5">Mohon isi informasi data Anda dengan benar, pastikan alamat tujuan pengiriman juga benar,
+            dan
+            produk yang hendak dibeli di form sebelah kanan.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 order-md-2 mb-4">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted">Keranjangmu</span>
+                <span class="badge badge-secondary badge-pill">{{ cartItems.length }}</span>
+            </h4>
+
+            <div *ngIf="cartItems.length > 0">
+                <ul class="list-group mb-3">
+                    <li class="list-group-item d-flex justify-content-between lh-condensed"
+                        *ngFor="let item of calculatedItems; let i = index">
+                        <img src="/assets/images/{{ item.product.image_url }}" alt="{{ item.product.name }}" width="50"
+                            height="50">
+                        <div>
+                            <h5 class="my-0">{{ item.product.name }}</h5>
+                            <small class="text-muted fs-4">x{{ item.quantity }}</small>
+                        </div>
+                        <span class="text-muted">{{ item.product.price | currency :'Rp':'symbol':'3.0' }}</span>
+                        <button class="btn btn-light btn-sm" (click)="removeItem(i)"><i
+                                class="bi bi-trash"></i></button>
+                    </li>
+                </ul>
+            </div>
+
+            <div *ngIf="cartItems.length === 0">
+                <p>Your cart is empty.</p>
+            </div>
+            <h5 class="text-muted">
+                Total Harga:
+            </h5>
+            <span class="badge badge-info fs-4 mb-4"> {{ totalPrice | currency :'Rp':'symbol':'3.0' }} </span>
+
+            <form class="card p-2">
+                <div class="input-group">
+                    <button class="btn btn-danger btn-xl" (click)="clearCart()"><i class="bi bi-trash"></i> Hapus
+                        Semua</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-8 order-md-1">
+            <h4 class="mb-3">Alamat pengiriman</h4>
+            <form (ngSubmit)="submit()" [formGroup]="formCheckout" class="needs-validation" novalidate>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="firstName">Nama depan</label>
+                        <input type="text" class="form-control" id="firstName" placeholder=""
+                            value="{{ currentUser?.first_name }}" formControlName="firstName"
+                            [ngClass]="{'is-invalid': submitted && f['firstName'].errors }" required>
+
+                        <div *ngIf="submitted && f['firstName'].errors" class="invalid-feedback">
+
+                            <div *ngIf="f['firstName'].errors['required']">
+                                Tolong isi nama depan.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="lastName">Nama belakang</label>
+                        <input type="text" class="form-control" id="lastName" placeholder=""
+                            value="{{ currentUser?.last_name }}" formControlName="lastName"
+                            [ngClass]="{'is-invalid': submitted && f['lastName'].errors }">
+
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="you@example.com"
+                        value="{{ currentUser?.email }}" formControlName="email"
+                        [ngClass]="{'is-invalid': submitted && f['email'].errors }">
+
+                    <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+                        <div *ngIf="f['email'].errors['required']">
+                            Tolong isi alamat email.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="address">Alamat</label>
+                    <input type="text" class="form-control" id="address" placeholder="1234 Main St"
+                        value="{{ currentUser?.address }}" formControlName="address1"
+                        [ngClass]="{'is-invalid': submitted && f['address1'].errors }" required>
+
+                    <div *ngIf="submitted && f['address1'].errors" class="invalid-feedback">
+                        <div *ngIf="f['address1'].errors['required']">
+                            Tolong isi alamat lengkap.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="address2">Alamat 2 <span class="text-muted">(Optional)</span></label>
+                    <input type="text" class="form-control" id="address2" formControlName="address2"
+                        [ngClass]="{'is-invalid': submitted && f['address2'].errors }" placeholder="Apartment or suite">
+                </div>
+
+                <div class="mb-3">
+                    <small class="text-muted">
+                        * Pastikan data diisi dengan benar. Data pribadi akunmu akan diupdate sesuai data di atas.
+                    </small>
+                </div>
+
+                <hr class="mb-4">
+                <button class="btn btn-success btn-lg btn-block" type="submit" data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop">
+                    <i class="bi bi-cart-check"></i>
+                    Checkout
+                </button>
+            </form>
+        </div>
+
+        <div class="col-md-4 order-md-3">
+        </div>
+    </div>
+
+    <footer class="my-5 pt-5 text-muted text-center text-small">
+    </footer>
+</div>
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true" [class.show]="acceptPay" *ngIf="acceptPay">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title">Payment Modal</h5>
+                <button type="button" class="btn-close" (click)="closePaymentModal()"></button>
+            </div>
+
+            <!-- Modal Body (Your app-payment content goes here) -->
+            <div class="modal-body">
+                <app-payment [ckey]="ckey" [snapkey]="skey"> </app-payment>
+            </div>
+
+            <!-- Modal Footer (Optional) -->
+            <div class="modal-footer">
+                <!-- Add any additional buttons or content here -->
+            </div>
+        </div>
+    </div>
+</div>

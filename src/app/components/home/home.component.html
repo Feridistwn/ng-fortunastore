@@ -1,0 +1,29 @@
+<!-- Masthead-->
+<header class="masthead unselectable">
+    <div class="container">
+        <div class="masthead-subheading">Selamat datang di Fortuna Furniture!</div>
+        <div class="masthead-heading text-white-50">Telusuri produk terbaik kami</div>
+        <a class="btn btn-success btn-xl" href="#!" routerLink="/shop"><i class="bi bi-cart"></i> Belanja</a>
+        <a class="btn btn-primary btn-xl ms-3" href="#!" routerLink="/register"><i class="bi bi-box-arrow-in-right"></i>
+            Daftar</a>
+    </div>
+</header>
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5 mb-5">
+        <h2>Partner Kami</h2>
+        <div class="brands d-flex flex-wrap justify-content-center mt-4" *ngIf="this.okgetbrands">
+            <div class="brand" *ngFor="let brand of brands; let i = index">
+                <img src="assets/brands/{{ brand.image_url }}" alt="{{ brand.name }}" width="200" height="200">
+            </div>
+        </div>
+
+    </div>
+    <div class="container px-4 px-lg-5 mt-5">
+        <h2 class="mt-5">Produk Kami</h2>
+        <p class="text-muted mb-4">Lihat beberapa produk kami dan cek mana yang kamu sukai.</p>
+        <app-product-list class="mt-4"></app-product-list>
+    </div>
+</section>
+
+
+<app-footer></app-footer>

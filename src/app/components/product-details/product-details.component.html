@@ -1,0 +1,39 @@
+<form class="mb-5" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <h1>Edit produk #{{ product.product_id }}</h1>
+    <hr>
+    <!-- Input untuk detail produk -->
+    <div class="mb-3">
+        <label for="productName" class="form-label">Nama Produk</label>
+        <input formControlName="name" type="text" class="form-control" id="productName" value="{{ product.name }}">
+    </div>
+    <div class="mb-3">
+        <label for="productCategory" class="form-label">Kategori</label>
+        <select formControlName="category_id" class="form-select" id="productCategory"
+            [(ngModel)]="product.category.category_id" name="productCategory">
+            <option *ngFor="let category of categories" [value]="category.category_id">{{ category.name }}</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="productPrice" class="form-label">Harga</label>
+        <div class="input-group">
+            <span class="input-group-text">Rp</span>
+            <input formControlName="price" type="text" class="form-control" id="productPrice"
+                value="{{ product.price }}">
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="productDescription" class="form-label">Deskripsi</label>
+        <input formControlName="description" type="text" class="form-control" id="productDescription"
+            value="{{ product.description }}">
+    </div>
+    <div class="mb-3">
+        <label for="productImage" class="form-label">Image</label>
+        <input type="file" class="form-control" id="image" (change)="onImageChange($event)">
+        <img *ngIf="imageUrlPreview" [src]="imageUrlPreview" class="mt-2 max-w-25" alt="Image Preview">
+        <input formControlName="image_url" type="text" class="form-control" id="productImage"
+            value="{{ product.image_url }}">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Simpan</button>
+    <button type="button" class="btn btn-danger ml-2" (click)="hapusProduk()">Hapus</button>
+</form>

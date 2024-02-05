@@ -1,0 +1,72 @@
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-default navbar-fixed-top">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="#!">{{ appName }}</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+                class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent" [class.hidden]="isAdmin">
+            <ul class="nav navbar-nav navbar-right me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item ms-1" routerLinkActive="active">
+                    <a class="nav-link" aria-current="page" href="#!" routerLink="/id">BERANDA</a>
+                </li>
+                <li class="nav-item ms-1" routerLinkActive="active" [class.active]="isProductActive">
+                    <a class="nav-link" aria-current="page" href="#!" [routerLink]="['/shop']">PRODUK</a>
+                </li>
+                <li class="nav-item ms-1" routerLinkActive="active">
+                    <a class="nav-link" href="#!" routerLink="/about">TENTANG
+                        KAMI</a>
+                </li>
+            </ul>
+            <form class="d-flex">
+                <button class="btn btn-outline-light" type="button" routerLink="/shoppingcart"
+                    routerLinkActive="active">
+                    <i class="bi-cart-fill me-1"></i>
+                    Keranjang
+                    <span class="badge bg-light text-dark ms-1 rounded-pill">{{ cartCount }}</span>
+                </button>
+                <button *ngIf="isLogin" (click)="logout()" class="btn btn-outline-light ms-3" type="button">
+                    <i class="bi bi-box-arrow-right"></i>
+                    Keluar
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<script>
+    $(document).ready(function () {
+        // Add smooth scrolling to all links in navbar + footer link
+        $(".navbar a, footer a[href='#myPage']").on('click', function (event) {
+            // Make sure this.hash has a value before overriding default behavior
+            if (this.hash !== "") {
+                // Prevent default anchor click behavior
+                event.preventDefault();
+
+                // Store hash
+                var hash = this.hash;
+
+                // Using jQuery's animate() method to add smooth page scroll
+                // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
+                $('html, body').animate({
+                    scrollTop: $(hash).offset().top
+                }, 900, function () {
+
+                    // Add hash (#) to URL when done scrolling (default click behavior)
+                    window.location.hash = hash;
+                });
+            } // End if
+        });
+
+        $(window).scroll(function () {
+            $(".slideanim").each(function () {
+                var pos = $(this).offset().top;
+
+                var winTop = $(window).scrollTop();
+                if (pos < winTop + 600) {
+                    $(this).addClass("slide");
+                }
+            });
+        });
+    })
+</script>

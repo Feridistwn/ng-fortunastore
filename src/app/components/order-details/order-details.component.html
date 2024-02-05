@@ -1,0 +1,15 @@
+<div>
+    <h2>Detail Order</h2>
+    <p>Pembeli: {{ order.user.name }}</p>
+    <p>Total Harga: {{ order.total_price | currency:'Rp':'symbol':'3.0' }}</p>
+    <p>Status:
+        <span *ngIf="order.status === 'Paid'" class="badge badge-pill badge-success">{{ order.status }}</span>
+        <span *ngIf="order.status !== 'Paid'" class="badge badge-pill badge-warning">{{ order.status }}</span>
+    </p>
+    <h3>Produk:</h3>
+    <ul>
+        <li *ngFor="let product of order.products">
+            {{ product.name }} ( {{ product.price | currency:'Rp':'symbol':'3.0' }} x{{ product.qty }})
+        </li>
+    </ul>
+</div>
